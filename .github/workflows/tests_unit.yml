@@ -71,12 +71,13 @@ jobs:
           build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
           build-scan-terms-of-service-agree: "yes"
 
-      - name: Upload Transforms directory before
-        uses: actions/upload-artifact@v4
-        if: always()
+      - name: Repace Transforms directory
+        uses: actions/download-artifact@v4
         with:
-          name: transforms-androidjar-before-${{ matrix.os }}
-          path: ~/.gradle/caches/transforms-4/f46cf63d0a549c8bc814e25133f449eb
+          name: transforms-4a-ubuntu-latest
+          path: /home/runner/.gradle/caches/transforms-4
+          run-id: 8251951910
+          github-token: ${{ secrets.GH_TOKEN }} # token with actions:read permissions on target repo
 
       - name: Clear Caches Optionally
         if: "${{ github.event.inputs.clearCaches != '' }}"
@@ -108,10 +109,3 @@ jobs:
       - uses: codecov/codecov-action@v3
         with:
           verbose: true
-
-      - name: Upload Transforms directory after
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: transforms-androidjar-after-${{ matrix.os }}
-          path: ~/.gradle/caches/transforms-4/f46cf63d0a549c8bc814e25133f449eb
